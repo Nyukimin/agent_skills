@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/analyze-codebase/manifest-schema-1.0.json",
+  "title": "Manifest",
+  "description": "analyze-codebase 実行結果の manifest（スキーマ 1.0）",
+  "type": "object",
+  "required": [
+    "version",
+    "manifest_schema_version",
+    "run_id",
+    "target_dir",
+    "phase_requested",
+    "phase_done",
+    "profile_path",
+    "timestamp_start",
+    "timestamp_end",
+    "steps",
+    "errors"
+  ],
+  "properties": {
+    "version": { "type": "string" },
+    "manifest_schema_version": { "type": "string", "const": "1.0" },
+    "run_id": { "type": "string" },
+    "target_dir": { "type": "string" },
+    "phase_requested": { "type": "string", "enum": ["phase1", "phase2", "all"] },
+    "phase_done": { "type": "string" },
+    "profile_path": { "type": "string" },
+    "timestamp_start": { "type": "string", "format": "date-time" },
+    "timestamp_end": { "type": "string", "format": "date-time" },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step_id", "name", "status", "output"],
+        "properties": {
+          "step_id": { "type": "string" },
+          "name": { "type": "string" },
+          "status": { "type": "string", "enum": ["done", "skipped", "failed", "running"] },
+          "output": { "type": "string" },
+          "started_at": { "type": "string", "format": "date-time" },
+          "finished_at": { "type": "string", "format": "date-time" },
+          "error": { "type": "string" }
+        }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step_id", "message"],
+        "properties": {
+          "step_id": { "type": "string" },
+          "message": { "type": "string" }
+        }
+      }
+    },
+    "git_commit": { "type": "string" },
+    "git_branch": { "type": "string" },
+    "profile_schema_version": { "type": "string" }
+  }
+}
