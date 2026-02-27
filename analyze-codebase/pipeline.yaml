@@ -1,0 +1,71 @@
+# ステップ一覧・Phase・依存・並列・条件の定義
+# 実行順序はトポロジカルソートで導出する。
+# 1-2 .. 1-N はプロファイルの module_groups の数で動的展開する（1-1 と同様の構造）。
+
+manifest_schema_version: "1.0"
+
+steps:
+  - id: "0a"
+    phase: 0
+    name: "refs マッピング"
+    condition: "refs_given"
+    deps: []
+    output: "refs_mapping.md"
+
+  - id: "0b"
+    phase: 0
+    name: "既存調査マッピング"
+    deps: []
+    output: "refs_mapping.md"
+
+  - id: "1-1"
+    phase: 1
+    name: "module (1st group)"
+    deps: ["0b"]
+    parallel_group: 1
+    output: "modules/{{module_group_id}}.md"
+
+  # 1-2 .. 1-N: プロファイルの module_groups の数に応じて実行時に展開する。
+  # 各 step は 1-1 と同様に deps: [0b], parallel_group: 1, output: modules/{{module_group_id}}.md
+
+  - id: "7"
+    phase: 1
+    name: "結合ポイントマップ"
+    deps: ["1-*"]
+    output: "結合ポイントマップ.md"
+
+  - id: "8"
+    phase: 1
+    name: "ユースケース逆引き"
+    deps: ["7"]
+    output: "ユースケース逆引き.md"
+
+  - id: "9"
+    phase: 1
+    name: "アーキテクチャ総合"
+    deps: ["8"]
+    output: "アーキテクチャ総合.md"
+
+  - id: "10"
+    phase: 2
+    name: "フォルダ概要の修正・補強"
+    deps: ["9"]
+    output: "modules/*"
+
+  - id: "11"
+    phase: 2
+    name: "結合・UC の修正・補強"
+    deps: ["10"]
+    output: "結合ポイントマップ.md"
+
+  - id: "12"
+    phase: 2
+    name: "全体概要の最終化"
+    deps: ["11"]
+    output: "アーキテクチャ総合.md"
+
+  - id: "13"
+    phase: 2
+    name: "異常一覧の生成"
+    deps: ["12"]
+    output: "modules/潜在バグ一覧.md"

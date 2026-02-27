@@ -1,0 +1,13 @@
+# 最小プロファイル（サンプル）
+# プロファイル契約の必須キーのみを持つ。Phase 1 の並列解析を1グループで実行する例。
+
+profile_schema_version: "1.0"
+name: default
+
+module_groups:
+  - id: sample
+    name: サンプルモジュール
+    dirs: ["src/"]
+    focus:
+      - "エントリポイント"
+      - "主要な公開API"

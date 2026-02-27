@@ -1,0 +1,126 @@
+# akerun プロジェクト用プロファイル
+# 現行 SKILL の6モジュールグループ・refs キーワード・9ユースケースを移行。
+
+profile_schema_version: "1.0"
+name: akerun
+
+target_dirs_default: ["akerun/src/"]
+
+module_groups:
+  - id: core
+    name: コア基盤
+    dirs: ["state_machine/", "event/", "action/", "command/"]
+    focus:
+      - "Dux フレームワークの構造（SM_REDUCER_REGISTER, SM_OBSERVER_REGISTER, SM_MIDDLEWARE_REGISTER）"
+      - "sm_dispatch() の内部フロー"
+      - "SM_State の構造"
+      - "module_init() との関係"
+
+  - id: comm_auth
+    name: 通信認証
+    dirs: ["ble/", "nfc_auth/", "subsys/"]
+    focus:
+      - "BLE サービス/キャラクタリスティクスの構成"
+      - "NFC 認証フロー"
+      - "コマンド受信からアクション生成までのフロー"
+
+  - id: physical
+    name: 物理制御
+    dirs: ["motor/", "drivers/", "hal/", "thumbturn/"]
+    focus:
+      - "モーター制御シーケンス（施錠/解錠）"
+      - "ドライバ層の構成（overcurrent, gear_unlatch 等）"
+      - "サムターン検出の仕組み"
+      - "HAL の抽象化レベル"
+
+  - id: data
+    name: データ永続化
+    dirs: ["data/", "logger/", "physical_log/", "shared/"]
+    focus:
+      - "PERSISTENT_REGISTER マクロと永続化フロー"
+      - "ログの種類（alert, history）と格納構造"
+      - "FlatBuffers スキーマとシリアライゼーション"
+      - "shared の共有ユーティリティ"
+
+  - id: features
+    name: 付帯機能
+    dirs: ["autolock/", "button/", "audio/", "power/"]
+    focus:
+      - "オートロックのタイマー制御"
+      - "ボタン操作のイベント処理"
+      - "音声フィードバックのパターン"
+      - "バッテリー管理と電源状態"
+
+  - id: test
+    name: テスト基盤
+    dirs: ["lifetest/", "factory/"]
+    focus:
+      - "ライフテストのシナリオ構成"
+      - "工場テストモードの制御"
+      - "main.c のブートシーケンス（module_init 呼び出し順）"
+      - "fatal エラーハンドリング"
+
+refs_keywords:
+  core:
+    - "状態遷移"
+    - "コマンド"
+    - "イベント"
+    - "state machine"
+  comm_auth:
+    - "BLE"
+    - "NFC"
+    - "外部設計"
+    - "外部仕様"
+    - "通信"
+    - "認証"
+  physical:
+    - "施錠"
+    - "開錠"
+    - "モーター"
+    - "サムターン"
+    - "ドアセンサー"
+    - "強制回転"
+  data:
+    - "FlashROM"
+    - "メモリ管理"
+    - "履歴"
+    - "ログ"
+    - "アップロード"
+  features:
+    - "オートロック"
+    - "ボタン"
+    - "音声"
+    - "バッテリー"
+    - "電源"
+    - "閾値"
+  test:
+    - "製造"
+    - "テスト"
+    - "品質保証"
+    - "ファームウェアアップデート"
+    - "DFU"
+
+use_cases:
+  - id: ble_lock
+    name: BLE経由の施錠/解錠
+  - id: nfc_lock
+    name: NFC経由の施錠/解錠
+  - id: autolock
+    name: オートロック
+  - id: thumbturn
+    name: サムターン操作
+  - id: ble_conn
+    name: BLE接続/切断
+  - id: ota
+    name: OTA（ファームウェア更新）
+  - id: battery
+    name: バッテリーレベル管理
+  - id: factory_test
+    name: 工場テスト実行
+  - id: boot
+    name: ブートシーケンス（main.c → module_init()）
+
+output:
+  base: "docs/codebase-map"
+  modules_subdir: "modules"
+  anomaly_file: "潜在バグ一覧.md"
