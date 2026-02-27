@@ -2,9 +2,29 @@
 
 以下のテンプレートに従って結合ポイントを分析すること。
 
+**生成時に付与する frontmatter の例**:
+```yaml
+---
+generated_at: "2025-02-27T15:00:00+09:00"
+run_id: run_YYYYMMDD_HHMMSS
+phase: 1
+step: "7"
+profile: {profile_name}
+artifact: integration_map
+---
+```
+
+**必須セクション**: templates/schema/integration_map_required_sections.yaml を参照。
+
 ---
 
-## 1. アーキテクチャ概要
+## 概要
+
+（全体のデータフロー・結合の考え方を2〜3行で要約すること。）
+
+---
+
+## アーキテクチャ概要
 
 ### Dux（Redux風）アーキテクチャ データフロー
 
@@ -18,7 +38,7 @@ Action → Middleware Chain → Reducer Chain → State → Observer Chain
 
 （SM_State のメンバーをツリー形式で記述）
 
-## 2. モジュール間依存関係マトリクス
+## モジュール間依存関係マトリクス
 
 ### 凡例
 - **R**: Reducer 登録（SM_REDUCER_REGISTER）
@@ -35,20 +55,26 @@ Action → Middleware Chain → Reducer Chain → State → Observer Chain
 
 （カテゴリごとに繰り返し）
 
-## 3. Middleware チェーン（実行順）
+## Middleware チェーン（実行順）
 
 | 優先度 | モジュール | 処理内容 |
 |--------|-----------|---------|
 | {priority} | {module} | {description} |
 
-## 4. Reducer チェーン（実行順）
+## Reducer チェーン（実行順）
 
 | 優先度 | モジュール | 処理対象 |
 |--------|-----------|---------|
 | {priority} | {module} | {description} |
 
-## 5. Observer チェーン
+## Observer チェーン
 
 | モジュール | 監視対象状態 | トリガー条件 |
 |-----------|------------|------------|
 | {module} | {state_member} | {condition} |
+
+## 関連ドキュメント
+
+- [アーキテクチャ総合.md](../アーキテクチャ総合.md)
+- [ユースケース逆引き.md](../ユースケース逆引き.md)
+- 各モジュール解析: modules/*.md

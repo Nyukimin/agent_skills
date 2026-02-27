@@ -3,6 +3,27 @@
 以下のテンプレートに従って各モジュールを解析すること。
 ソースコードに書かれていない情報（Why、関係性、構造、落とし穴）を記述する。
 
+**生成時に付与する frontmatter の例**（ファイル先頭に YAML で記載）:
+```yaml
+---
+generated_at: "2025-02-27T15:00:00+09:00"
+run_id: run_YYYYMMDD_HHMMSS
+phase: 1
+step: "1-1"
+profile: {profile_name}
+artifact: module
+module_group_id: {module_group_id}
+---
+```
+
+**必須セクション**: templates/schema/module_analysis_required_sections.yaml を参照。概要・関連ドキュメントを必ず含めること。
+
+---
+
+## 概要
+
+（このモジュールの役割を2〜3行で要約すること。）
+
 ---
 
 ## モジュール名: {module_name}
@@ -52,3 +73,10 @@
 - **module_init() 登録**: あり / なし
 - **優先度**: {priority}
 - **注意点**: {初期化順に関する注意点があれば記述}
+
+### 関連ドキュメント
+
+- [アーキテクチャ総合.md](../アーキテクチャ総合.md)
+- [結合ポイントマップ.md](../結合ポイントマップ.md)
+- [ユースケース逆引き.md](../ユースケース逆引き.md)
+- 他モジュール解析: modules/{他module_group_id}.md
