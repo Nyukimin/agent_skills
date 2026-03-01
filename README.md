@@ -28,15 +28,37 @@ Claude / Cursor / Codex で使えるエージェント用スキル集です。
 | **migrate-to-skills** | 既存ルールをスキルへ移行 |
 | **update-cursor-settings** | Cursor/VSCode の settings.json を編集 |
 
+### Apify スキル（[apify/agent-skills](https://github.com/apify/agent-skills)）
+
+Web スクレイピング・データ抽出・自動化用。Apify アカウントと API トークンが必要。
+
+| スキル | 説明 |
+|--------|------|
+| **apify-actor-development** | Apify Actor の開発・デバッグ・デプロイ |
+| **apify-actorization** | 既存プロジェクトを Apify Actor に変換 |
+| **apify-ultimate-scraper** | 汎用 AI スクレイパー（Instagram, Facebook, Google 等） |
+| **apify-lead-generation** | B2B/B2C リード生成 |
+| **apify-ecommerce** | eコマースデータ取得（価格調査等） |
+| **apify-market-research** | 市場調査・分析 |
+| その他 12 スキル | audience-analysis, brand-reputation-monitoring, competitor-intelligence 等 |
+
 ## 使い方
 
 ### クイックセットアップ（個人用）
 
-このリポジトリを clone 後、セットアップスクリプトを実行：
+このリポジトリを clone 後、セットアップスクリプトを実行（submodule 含む）：
 
 ```bash
-git clone https://github.com/Nyukimin/agent_skills.git ~/agent_skills
+git clone --recurse-submodules https://github.com/Nyukimin/agent_skills.git ~/agent_skills
 cd ~/agent_skills
+./scripts/setup-links.sh
+```
+
+既に clone 済みの場合は submodule を取得：
+
+```bash
+cd ~/agent_skills
+git submodule update --init
 ./scripts/setup-links.sh
 ```
 
@@ -61,6 +83,10 @@ mkdir -p ~/.cursor/skills-cursor
 for skill in create-rule create-skill create-subagent migrate-to-skills update-cursor-settings; do
   ln -sf $AGENT_SKILLS/$skill ~/.cursor/skills-cursor/$skill
 done
+# Apify skills（submodule 取得後）
+for skill in $AGENT_SKILLS/apify-agent-skills/skills/*/; do
+  ln -sf "$skill" ~/.cursor/skills-cursor/$(basename "$skill")
+done
 ```
 
 #### Claude（`~/.claude/skills/`）
@@ -69,9 +95,13 @@ done
 AGENT_SKILLS=~/agent_skills
 
 mkdir -p ~/.claude/skills
-ln -sf $AGENT_SKILLS/analyze-codebase ~/.claude/skills/analyze-codebase
-ln -sf $AGENT_SKILLS/debug-investigate ~/.claude/skills/debug-investigate
-# 必要に応じて他のスキルも追加
+for skill in analyze-codebase debug-investigate create-rule create-skill skill-creator skill-installer; do
+  ln -sf $AGENT_SKILLS/$skill ~/.claude/skills/$skill
+done
+# Apify skills（submodule 取得後）
+for skill in $AGENT_SKILLS/apify-agent-skills/skills/*/; do
+  ln -sf "$skill" ~/.claude/skills/$(basename "$skill")
+done
 ```
 
 ### プロジェクト単位で使う
@@ -84,6 +114,12 @@ git clone https://github.com/Nyukimin/agent_skills.git /tmp/agent_skills
 ln -s /tmp/agent_skills/analyze-codebase .claude/skills/analyze-codebase
 ln -s /tmp/agent_skills/debug-investigate .claude/skills/debug-investigate
 ```
+
+## Apify スキル利用時の前提条件
+
+- [Apify アカウント](https://apify.com)
+- API トークン（Apify Console で取得）
+- `.env` に `APIFY_TOKEN=your_token` を設定
 
 ## ライセンス
 

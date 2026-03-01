@@ -1,0 +1,3 @@
+[submodule "apify-agent-skills"]
+	path = apify-agent-skills
+	url = https://github.com/apify/agent-skills.git
